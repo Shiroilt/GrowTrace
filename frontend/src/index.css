@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .ghost-border {
+    border: 0.5px solid theme('colors.outline-variant');
+  }
+  
+  .glass-nav {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  .botanical-shadow {
+    box-shadow: 0 40px 40px -20px rgba(0, 105, 76, 0.04);
+  }
+}
