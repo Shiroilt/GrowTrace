@@ -1,0 +1,61 @@
+# =========================
+# Django Backend
+# =========================
+Django
+django-cors-headers
+djangorestframework
+Pillow
+
+# =========================
+# GrowTrace / RAG
+# =========================
+chromadb
+sentence-transformers
+pandas
+numpy
+
+# =========================
+# Gemini
+# =========================
+google-genai
+
+# =========================
+# Firebase
+# =========================
+firebase-admin
+
+# =========================
+# HTTP / APIs
+# =========================
+requests
+httpx
+
+# =========================
+# Plant / Knowledge Sources
+# =========================
+beautifulsoup4
+newspaper3k
+Wikipedia-API
+lxml
+lxml_html_clean
+feedparser
+
+# =========================
+# ML / AI
+# =========================
+torch
+torchvision
+transformers
+huggingface-hub
+onnxruntime
+
+# =========================
+# Other tools from old env
+# =========================
+ollama
+python-dotenv
+PyYAML
+nltk
+scikit-learn
+scipy
+tqdm

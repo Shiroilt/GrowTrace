@@ -1,0 +1,14 @@
+plant_id,common_name,soil_type,soil_texture,soil_drainage,soil_moisture_min,soil_moisture_max,watering_frequency,water_requirement,waterlogging_tolerance,drought_tolerance,soil_ph_min,soil_ph_max,organic_matter_requirement,mulch_requirement
+1,Money Plant,Well-draining potting mix,Loamy to sandy loam,Well-drained,40%,60%,Every 7-10 days (allow top inch to dry),Low to Moderate,Low,Moderate,6,7,Moderate,Low
+2,Monstera,Well-draining rich potting mix,Loamy,Well-drained,50%,70%,Every 7-10 days (allow top 2 inches to dry),Moderate,Low,Moderate,5.5,7,High,Low
+3,Rubber Plant,Well-draining potting mix,Loamy to sandy loam,Well-drained,40%,60%,Every 7-10 days (allow top 2 inches to dry),Low to Moderate,Low,Moderate,6,7,Moderate,Low
+4,Dieffenbachia,Well-draining rich potting mix,Loamy,Well-drained,50%,70%,Every 7-10 days (allow top inch to dry),Moderate,Low,Low,6,7,High,Low
+5,Aglaonema,Well-draining potting mix,Loamy,Well-drained,40%,60%,Every 7-10 days (allow top inch to dry),Low to Moderate,Low,Moderate,6,7,Moderate,Low
+6,Syngonium,Well-draining potting mix,Loamy,Well-drained,50%,70%,Every 7-10 days (allow top inch to dry),Moderate,Low,Low to Moderate,5.5,6.5,Moderate,Low
+7,Rose,Rich well-draining garden soil,Loamy,Well-drained,50%,70%,Every 2-3 days in summer / every 5-7 days in winter,Moderate to High,Low,Low to Moderate,6,6.5,High,High
+8,Hibiscus,Rich well-draining garden soil,Loamy to sandy loam,Well-drained,50%,70%,Every 2-3 days in summer / every 5-7 days in winter,Moderate to High,Low,Moderate,6,7,High,Moderate
+9,Mogra,Well-draining loamy soil,Loamy to sandy loam,Well-drained,40%,60%,Every 2-3 days in summer / every 5-7 days in winter,Moderate,Low,Moderate,6,7.5,Moderate,Moderate
+10,Croton,Rich well-draining potting mix or garden soil,Loamy,Well-drained,50%,70%,Every 3-5 days in summer / every 7-10 days in winter,Moderate,Low,Low,5.5,6.5,High,Moderate
+11,Curry Leaf,Well-draining loamy or sandy loam soil,Sandy loam to loamy,Well-drained,40%,60%,Every 3-5 days in summer / every 7-10 days in winter,Moderate,Low,Moderate to High,6,7,Moderate,Moderate
+12,Tulsi,Well-draining loamy soil,Loamy to sandy loam,Well-drained,40%,60%,Every 2-3 days in summer / every 5-7 days in winter,Moderate,Low,Moderate,6,7.5,Moderate,Low
+13,Aloe Vera,Sandy or gritty well-draining soil / cactus mix,Sandy to sandy loam,Very well-drained,20%,40%,Every 14-21 days in summer / every 30+ days in winter,Very Low,Very Low,Very High,6,7,Low,Low

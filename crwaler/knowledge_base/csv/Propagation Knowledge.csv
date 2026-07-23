@@ -1,0 +1,155 @@
+plant_id,common_name,cutting_possible,propagation_methods,cutting_type,rooting_hormone_required,rooting_hormone_type,rooting_success_rate,rooting_days_min,rooting_days_max,best_propagation_season,best_propagation_months,propagation_difficulty,water_propagation_possible,air_layering_possible,division_possible,seed_propagation_possible,grafting_possible
+1,Money Plant,Yes,"Stem cuttings, water propagation, soil propagation",Stem node cutting (with at least one node and aerial root),"No (roots easily without it, but hormone can speed things up)","Optional — IBA (Indole-3-butyric acid) based rooting hormone
+",Very high (90–100%),"7
+",21,"Spring and Summer
+","March–August
+","Very Easy
+","Yes
+",Yes(aerial roots at itswrap a node in moist moss/soil),"Yes (if multiple stems/clumps present at soil level)
+",No (rarely flowers indoors; not practically propagated from seed),"No (not a grafting-suitable species)
+"
+2,Monstera,"Yes — a node with at least one aerial root can be cut and will grow into a new plant
+","Stem cuttings, water propagation, soil propagation, air layering","Stem node cutting (must include at least one node,
+ Ideally with an aerial root attached)
+","No — roots without it, though success is faster/more 
+Reliable 
+With it","IBA (Indole-3-butyric acid) based rooting hormone
+","High (70–90%, depending on whether the 
+Cutting has an aerial root)
+",14,45,Spring and Summer ,"March–August
+","Easy to Moderate
+","Yes — nodes will root directly 
+in water
+","Yes — wrapping a node (especially one with an aerial root) in moist 
+moss while still attached to the mother plant will induce rooting
+ at that point
+","Yes — if the plant has multiple stems/crowns growing
+ From the base, these can be separated with roots intact
+","Yes — technically works if viable seed is obtained (requires the 
+plant to flower and fruit, which is rare indoors, but the technique
+ Itself is possible)","No — Monstera doesn't form compatible vascular 
+graft unions the way woody trees do; this technique
+ Doesn't work on it"
+3,Rubber Plant,"Yes — a stem cutting with at least one node and leaf can be cut and will grow into a new plant
+","Stem cuttings, air layering, soil propagation
+",Stem tip cutting or single node cutting with leaf,"No — but strongly recommended as rubber plant cuttings can 
+Be slow to root without it","IBA (Indole-3-butyric acid) based rooting hormone
+","Moderate (60–80%)
+",21,60,Spring and Summer,"March–August
+",Moderate,"Yes — cuttings can root in 
+water, though soil or moss 
+rooting tends to give more 
+Reliable results
+","Yes — one of the most reliable methods for rubber plant; wrapping a notched stem section in moist moss induces rooting at that point, and is especially useful for tall leggy plants
+","No — rubber plant grows as a single-stemmed tree and does 
+not produce multiple crowns or offshoots at the base that can be 
+Divided
+","Yes — technically possible if viable seed is obtained, but 
+rubber plant rarely flowers outside its native tropical habitat, 
+Making seed extremely difficult to source","No — not a standard or practically viable technique 
+For Ficus elastica
+"
+4,Dieffenbachia,Yes — stem cuttings with at least one node can be cut and will grow into a new plant,"Stem cuttings, cane cuttings, water propagation, soil propagation,
+ Division
+","Stem tip cutting or cane section cutting (a bare section of 
+stem with at least one node, even without leaves, can root 
+And sprout)","No — roots reasonably well without it, but hormone improves success rate","IBA (Indole-3-butyric acid) based rooting hormone
+","High (75–90%)
+",14,40,"Spring and Summer
+","March–August
+",Easy ,Yes — stem tip cuttings root readily in water,"Yes — wrapping a node on the main cane in moist moss will 
+Induce rooting at that point, useful for tall bare-stemmed plants
+","Yes — if the plant has produced multiple offshoots or 
+basal shoots at soil level, these can be separated with 
+Roots intact and potted individually
+","Yes — technically possible from seed if viable seed is obtained,
+ but Dieffenbachia rarely flowers indoors and seed is difficult 
+To source commercially
+",No — not a standard or practically viable technique for Dieffenbachia
+5,Aglaonema,"Yes — stem cuttings with at least one node and leaf can be cut and will grow into a new 
+Plant
+","Stem cuttings, water propagation, soil propagation, division
+","Stem tip cutting or stem section cutting with at least one 
+Node and leaf
+","No — roots well without it, though hormone can improve success rate","IBA (Indole-3-butyric acid) based rooting hormone
+","High (80–90%)
+",14,40,"Spring and Summer
+",March–August ,Easy ,"Yes — stem cuttings root readily in water
+","Yes — wrapping a node on the main stem in moist moss will 
+Induce rooting at that point, particularly useful for tall leggy specimens
+","Yes — one of the most common and reliable methods; mature
+ Aglaonema naturally produces multiple stems and offshoots at the
+ Base that can be separated with roots intact and potted individually
+","Yes — technically possible from seed if viable seed is 
+obtained from the plant's berries, but rarely done as it is 
+Slow and division/cuttings are far more practical
+","No — not a standard or practically viable technique for Aglaonema
+"
+6,Syngonium,Yes — stem cuttings with at least one node can be cut and will grow into a new plant,"Stem cuttings, water propagation, soil propagation, division ",Stem tip cutting or stem node cutting with at least one node and leaf,"No — roots very easily without it, though hormone can slightly improve speed
+","IBA (Indole-3-butyric acid) based rooting hormone
+",Very High (85–95%),7,21,Spring and Summer,March–August,Very Easy ,"Yes — nodes root very readily in water
+","Yes — wrapping a node in moist moss while still attached to the mother plant will induce rooting at that point
+","Yes — mature Syngonium naturally produces multiple stems and offshoots at 
+The base that can be separated with roots intact and potted individually","Yes — technically possible from seed if viable seed is obtained,
+ But Syngonium rarely flowers indoors making seed very difficult to source
+","No — not a standard or practically viable technique for Syngonium
+"
+7,Rose,Yes — stem cuttings with at least one node can be cut and will grow into a new plant,"Stem cuttings, soil propagation, air layering, grafting, division, seed propagation","Stem tip cutting or hardwood/softwood stem cutting with at least 2–3 nodes
+",Yes — strongly recommended as rose cuttings root much more reliably with rooting hormone,"IBA (Indole-3-butyric acid) based rooting hormone
+","Moderate (50–75%)
+",21,60,Spring and Autumn,"February–April and September–October
+","Moderate
+",Yes — rose cuttings can root in water though soil rooting gives more reliable and stronger root development,Yes — bending a cane down and burying a wounded node section in moist soil or wrapping in moist moss will induce rooting at that point,"Yes — own-rooted roses (not grafted ones) can be divided at the root clump if multiple crowns are present
+",Yes — roses produce seeds inside rosehips; seeds can be germinated but offspring will not be identical to the parent plant as most garden roses are hybrids,"Yes — one of the few plants on your list where grafting is a standard and widely practiced commercial propagation method; rose cultivars are commonly budded or grafted onto hardy rootstocks for stronger plants
+"
+8,Hibiscus,Yes — stem cuttings with at least one node can be cut and will grow into a new plant,"Stem cuttings, soil propagation, air layering, seed propagation",Stem tip cutting or softwood/semi-hardwood stem cutting with at least 2–3 nodes,"No — but strongly recommended as it significantly improves rooting success and speed
+","IBA (Indole-3-butyric acid) based rooting hormone
+","Moderate to High (65–85%)
+",21,45,Spring and Summer,March–July,"Easy to Moderate
+","Yes — cuttings can root in water though soil rooting tends to produce stronger root systems
+","Yes — wrapping a wounded stem section in moist moss while still attached to the mother plant will induce rooting at that point
+","No — Hibiscus rosa-sinensis grows as a single-stemmed shrub and does not produce dividable multiple crowns or offshoots at the base
+",Yes — Hibiscus produces seeds from its seed pods after flowering; seeds germinate readily but offspring of hybrid cultivars will not be identical to the parent plant,"Yes — grafting is practiced commercially to combine desirable flowering cultivars onto stronger rootstocks, though it is not commonly done by home gardeners
+"
+9,Mogra,"Yes — stem cuttings with at least one node can be cut and will grow into a new plant
+","Stem cuttings, soil propagation, air layering, division
+","Stem tip cutting or semi-hardwood stem cutting with at least 2–3 nodes
+","No — but strongly recommended as it significantly improves rooting success and speed
+","IBA (Indole-3-butyric acid) based rooting hormone
+",Moderate to High (65–80%),21,45,Spring and Summer,March–July,"Easy to Moderate
+",Yes — cuttings can root in water though success rate is lower than soil rooting for Mogra,"Yes — wrapping a wounded stem section in moist moss while still attached to the mother plant will induce rooting at that point; works reliably on Mogra
+","Yes — mature Mogra plants naturally produce multiple stems and basal shoots that can be separated with roots intact and potted individually
+","Yes — Mogra produces seeds technically, but most commonly grown cultivars like Grand Duke of Tuscany are double-flowered and sterile producing no viable seed, so seed propagation is practically not possible for most garden Mogra","No — not a standard or practically viable technique for Jasminum sambac
+"
+10,Croton,"Yes — stem cuttings with at least one node and leaf can be cut and will grow into a new plant
+","Stem cuttings, soil propagation, air layering, seed propagation
+",Stem tip cutting or stem section cutting with at least 2–3 nodes and leaves,No — but strongly recommended as Croton cuttings can be slow and reluctant to root without it,"IBA (Indole-3-butyric acid) based rooting hormone
+","Moderate (50–70%)
+",21,60,Spring and Summer,March–August,Moderate,Yes — cuttings can root in water though success rate is lower than soil rooting; milky sap should be allowed to dry on the cut end for a few hours before placing in water,Yes â€” one of the more reliable methods for Croton; wrapping a wounded stem section in moist moss induces rooting at that point and avoids the transplant shock that Croton cuttings are prone to,"No — Croton grows as a single-stemmed shrub and does not produce dividable multiple crowns or offshoots at the base
+","Yes — Croton produces seeds that can be germinated, but offspring of named cultivars will not be identical to the parent plant as color and leaf pattern vary significantly from seed
+",No — not a standard or practically viable technique for Codiaeum variegatum
+11,Curry Leaf,"Yes — stem cuttings with at least one node can be cut and will grow into a new plant
+","Stem cuttings, soil propagation, seed propagation, root suckers
+",Stem tip cutting or semi-hardwood stem cutting with at least 2–3 nodes ,Yes — strongly recommended as Curry Leaf cuttings are notoriously difficult to root without hormone assistance,"IBA (Indole-3-butyric acid) based rooting hormone
+",Low to Moderate (40–60%),30,90,Spring and Summer,March–July,Difficult,No — Curry Leaf cuttings do not root reliably in water; soil or rooting medium is required,Yes â€” wrapping a wounded stem section in moist moss while still attached to the mother plant will induce rooting at that point and is actually more reliable than cuttings for this plant,Yes — mature Curry Leaf plants naturally produce root suckers and basal shoots around the base that can be carefully separated with roots intact and potted individually; this is one of the most reliable propagation methods for this plant,Yes — fresh seeds from ripe black berries germinate well; seed is actually one of the most reliable propagation methods for Curry Leaf but seeds must be fresh as they lose viability very quickly after harvest,"No — not a standard or practically viable technique for Murraya koenigii
+"
+12,Tulsi,"Yes — stem cuttings with at least one node can be cut and will grow into a new plant
+","Stem cuttings, water propagation, soil propagation, seed propagation",Stem tip cutting with at least 2–3 nodes and leaves,No — Tulsi roots very easily without any rooting hormone,"Not required
+",Very High (90–95%),7,21,"Spring and Summer
+","March–August
+",very Easy,Yes — Tulsi stem cuttings root very readily in water within 7–14 days,"Yes — technically possible as the stems will root at nodes when in contact with moist medium, but rarely practiced as cuttings and seeds are far simpler and faster","Yes — mature bushy Tulsi plants can be carefully divided at the root clump if multiple stems with roots are present, though seed and cuttings are more commonly used
+","Yes — one of the most common and reliable propagation methods for Tulsi; seeds germinate very quickly and easily, and the plant self-seeds readily if flower spikes are left on the plant
+","No — not a standard or practically viable technique for Ocimum tenuiflorum
+"
+13,"Aloe Vera
+",Yes — leaf cuttings can be taken but success rate is low; stem cuttings with a crown are more reliable,"Offsets/pups, division, stem crown cutting, seed propagation",Crown stem cutting (top rosette with a short stem section) or leaf cutting (low success rate),"No — offsets and crown cuttings root without hormone, though it can improve leaf cutting success
+","IBA (Indole-3-butyric acid) based rooting hormone (optional)
+","Very High for offsets/pups (90–95%); 
+Low for leaf cuttings (20–40%)
+",14,45,Spring and Summer,March–August,"Very Easy via offsets/pups; 
+Difficult via leaf cuttings
+","No — Aloe cuttings and offsets do not root reliably in water; soil or well-draining rooting medium is required
+","No — Aloe Vera is a rosette-forming succulent without elongated climbable stems making air layering physically not applicable to this plant
+",Yes — one of the most reliable and common methods; mature Aloe naturally produces offsets (pups) around the base that can be separated with roots intact and potted individually,"Yes — Aloe Vera produces seeds from its flower spikes; seeds germinate reasonably well but plants are very slow growing from seed and take years to reach a useful size
+","No — not a standard or practically viable technique for Aloe vera
+"

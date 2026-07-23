@@ -1,0 +1,91 @@
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# ============================================
+# Python Virtual Environments
+# ============================================
+.venv/
+venv/
+env/
+ENV/
+
+# ============================================
+# Django
+# ============================================
+backend/db.sqlite3
+backend/media/
+*.log
+staticfiles/
+
+# ============================================
+# Frontend / Node
+# ============================================
+frontend/node_modules/
+node_modules/
+frontend/dist/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================
+# GrowTrace Vector Database / Generated Data
+# ============================================
+vector_db/
+crwaler/vector_db/
+crwaler/sensor_data/
+crwaler/models/
+crwaler/image_ai/
+
+# ============================================
+# SECRET CONFIGURATION - DO NOT COMMIT
+# ============================================
+crwaler/config/api.json
+crwaler/config/gemini.json
+crwaler/config/firebase/*.json
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# ============================================
+# IDE / Editor
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================================
+# OS generated
+# ============================================
+.DS_Store
+Thumbs.db
+
+# ============================================
+# Temporary / Cache files
+# ============================================
+.cache/
+tmp/
+temp/
+*.tmp
+
+# ============================================
+# Local backup requirements
+# ============================================
+crawler_requirements_backup.txt
+backend_requirements_backup.txt

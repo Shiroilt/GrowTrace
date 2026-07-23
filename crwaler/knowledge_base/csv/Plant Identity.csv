@@ -1,0 +1,100 @@
+plant_id,common_name,scientific_name,family,genus,species,cultivar,plant_category,plant_type,native_region,native_country,life_cycle,growth_habit,growth_rate,mature_height_cm,mature_width_cm,toxicity,indoor_outdoor
+1,Money Plant,Epipremnum pinnatum,Araceae,Epipremnum,pinnatum,Aureum,Houseplant / Ornamental foliage plant,Vine / Climber,"Southeast Asia, Indo-Pacific","Indonesia, Philippines, Malaysia (also naturalized widely in tropics)",Perennial,Climbing / Vining / Trailing,Fast,300-2000+,100-300 spread,"Toxic to humans and pets if ingested (contains insoluble calcium oxalate crystals; causes oral/GI irritation)
+",Both
+2,Monstera,Monstera deliciosa,Araceae,Monstera,deliciosa,Borsigiana,Houseplant / Ornamental foliage plant,"Vine / Climber (hemiepiphyte)
+",Central America,"Mexico, Panama (also found in parts of South America)
+",Perennial,"Climbing, with large fenestrated (split) leaves; uses aerial roots to attach to trees",Fast,300-2000+,100-300 spread,"Toxic to humans and pets if ingested (calcium oxalate crystals; causes oral/GI irritation, swelling)",Both
+3,Rubber Plant,Ficus elastica,Moraceae,Ficus,elastica,"Robusta', 'Tineke', 'Ruby', 'Burgundy'/'Black Prince'",Houseplant / Ornamental foliage plant,"Tree (grown as a shrub/tree indoors)
+","South and Southeast Asia
+","India, Nepal, Bhutan, Myanmar, Indonesia, Malaysia
+",Perennial,"Upright, single or branching stem with large glossy leaves
+",Moderate,300-4000+,"100–1000
+",Toxic to humans and pets if ingested; sap can cause skin irritation in sensitive individuals,Both
+4,Dieffenbachia,"Dieffenbachia seguine
+",Araceae,Dieffenbachia,seguine,"Camille', 'Tropic Snow', 'Compacta', 'Reflector'",Houseplant / Ornamental foliage plant,"Herbaceous shrub
+","Caribbean, Central and South America
+","Brazil, Colombia, Costa Rica, and other tropical American countries
+",Perennial,"Upright, cane-like stem with large broad variegated leaves
+",Moderate,60–200,60–100,"Highly toxic to humans and pets if ingested;
+ contains calcium oxalate crystals that cause intense oral/throat swelling and burning
+ (the ""dumb cane"" name comes from temporary loss of speech if chewed)
+",Both
+5,Aglaonema,"Aglaonema commutatum
+",Araceae,Aglaonema,commutatum,"Silver Bay', 'Maria', 'Red Valentine', 'Pictum'",Houseplant / Ornamental foliage plant,Herbaceous perennial,"Southeast Asia
+","Philippines, Indonesia, and other parts of tropical Asia
+",Perennial,"Upright to slightly bushy, with lance-shaped variegated 
+leaves emerging from a short stem",Slow to moderate,30–90,"30–60
+","Toxic to humans and pets if ingested; contains calcium oxalate crystals causing oral/GI irritation
+",Both
+6,Syngonium,"Syngonium podophyllum
+",Araceae,Syngonium,podophyllum,"Pink Allusion', 'White Butterfly', 'Neon Robusta',
+ 'Albo Variegatum'","Houseplant / Ornamental foliage plant
+","Vine / Climber (also grown trailing)
+","Central and South America
+","Mexico, Brazil, Costa Rica, Bolivia, and other tropical 
+American countries
+","Perennial
+","Climbing or trailing; juvenile leaves are simple arrow-shaped, maturing into 
+Deeply lobed leaves with age and support
+","Fast
+",50-600+,60-120,"Toxic to humans and pets if ingested; contains calcium oxalate crystals causing oral/GI irritation
+",Both
+7,Rose,Rosa indica,Rosaceae,Rosa,"Indian Fragrant Rose,hybrida","Gulkand Rose,Mister Lincoln', 'Iceberg', 'Peace', 
+'Queen Elizabeth'",Ornamental flowering shrub,"Shrub(also climbing, rambling, or miniature forms)","Varies by species — Asia, Europe, North America
+","india,China, and various countries across temperate Asia, Europe, 
+and North America",Perennial,"Upright, climbing, or trailing, with thorny stems and compound serrated leaves","Moderate to fast
+",30-600,60–200,"Generally non-toxic to humans and pets (petals are even edible); thorns pose a physical injury risk rather
+ than chemical toxicity",outdoor
+8,Hibiscus,Hibiscus rosa-sinensis,Malvaceae,Hibiscus,"rosa-sinensis
+","'Cooperi', 'President', 'Brilliant Red', 
+many double-flowered hybrids","Ornamental flowering shrub
+",Shrub,East Asia(exact wild origin uncertain; long cultivated),"Uncertain — possibly China or Pacific Islands;
+ Widely naturalized across the tropics
+",Perennial,"Upright, bushy, with glossy serrated leaves and large showy trumpet-shaped flowers
+",Fast,150–500,100–300,"Generally considered non-toxic to humans and pets; flowers and leaves are even used in teas and some traditional 
+Foods, though large quantities of any plant material can cause mild stomach upset",outdoor
+9,Mogra,"Jasminum sambac
+",Oleaceae,Jasminum,sambac,"'Grand Duke of Tuscany' (double-flowered),
+ 'Maid of Orleans' (single-flowered)","Ornamental flowering shrub
+","Shrub / Vine (semi-climbing)
+","South and Southeast Asia
+","India, and surrounding tropical Asian regions (widely naturalized)
+",Perennial,"Bushy, sprawling to semi-climbing, with glossy oval leaves and 
+Clusters of intensely fragrant white flowers
+","Moderate to fast
+",100–300,"100–200
+","Generally considered non-toxic to humans and pets; flowers are widely used in teas, garlands, and perfumes",outdoor
+10,Croton,Codiaeum variegatum,Euphorbiaceae,Codiaeum,variegatum,"Petra', 'Mammy', 'Gold Dust', 'Red Iceton'","Ornamental foliage shrub
+",Shrub,"Southeast Asia, Pacific Islands
+","Indonesia, Malaysia, and surrounding island regions (also Australia)
+","Perennial
+","Upright, bushy, with thick leathery leaves in striking patterns of yellow, 
+Orange, red, and green
+","Moderate
+","100–300
+",60–150,Toxic to humans and pets if ingested; sap can also cause skin irritation in sensitive individuals,Both
+11,Curry Leaf,Murraya koenigii,Rutaceae,Murraya,koenigii,Curry Leaf,"Culinary / Aromatic herb shrub-tree
+",Shrub / Small tree,"South Asia
+","India, Sri Lanka
+","Perennial
+","Upright, bushy to tree-like, with compound aromatic leaves used widely 
+In cooking
+",Moderate,"100–600 
+",100–300,"Non-toxic; leaves are edible and a staple flavoring ingredient in South Asian cuisine
+",outdoor
+12,Tulsi,Ocimum tenuiflorum,Lamiaceae,Ocimum,tenuiflorum,"Rama Tulsi (green), Krishna/Shyama Tulsi
+ (purple-tinged),
+ Vana Tulsi (wild)",Culinary / Medicinal / Sacred herb,"Herb (sub-shrub)
+","South and Southeast Asia
+","India,",Perennial,"Upright, bushy, with fragrant aromatic leaves and small flower spikes",Fast,30–90,30–60 ,"Non-toxic; leaves are edible and widely used in teas, cooking, and traditional Ayurvedic medicine",outdoor
+13,"Aloe Vera
+","Aloe Vera
+",Asphodelaceae,Aloe,vera,"ornamental relatives include Aloe arborescens, Aloe ferox",Succulent / Medicinal plant,Succulent,"Arabian Peninsula
+","Likely Arabian Peninsula or North Africa; naturalized 
+Across tropical and subtropical regions globally
+",Perennial,"Rosette of thick, fleshy, spiky-edged leaves growing close to the ground, 
+Often producing offsets (""pups"") around the base","Slow to moderate
+",30–60,30–60,"Mildly toxic to pets (cats, dogs, horses) if ingested due to saponins, causing vomiting/diarrhea; 
+the inner gel is safe for topical human use and limited edible use, but the outer leaf latex (aloin) 
+Is toxic if ingested in quantity
+",outdoor

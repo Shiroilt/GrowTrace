@@ -1,0 +1,14 @@
+plant_id,common_name,ideal_temp_min,ideal_temp_max,critical_temp_min,critical_temp_max,ideal_humidity_min,ideal_humidity_max,critical_humidity_min,critical_humidity_max,ideal_light_min,ideal_light_max,light_type,sun_exposure,wind_tolerance,rain_tolerance,frost_tolerance,heat_tolerance
+1,Money Plant,18,30,10,38,50,70,30,90,1000,10000,Bright indirect light,Partial shade to bright indirect,Low,Moderate,No,High
+2,Monstera,18,30,10,38,60,80,40,90,1000,10000,Bright indirect light,Partial shade to bright indirect,Low,Moderate,No,Moderate
+3,Rubber Plant,15,30,10,38,40,60,20,80,2000,15000,Bright indirect to some direct,Partial to full sun,Low,Moderate,No,Moderate to High
+4,Dieffenbachia,18,30,12,38,60,80,40,90,500,8000,Low to bright indirect light,Shade to partial shade,Low,Moderate,No,Moderate
+5,Aglaonema,18,30,13,38,50,70,30,90,500,8000,Low to bright indirect light,Shade to partial shade,Low,Moderate,No,Moderate
+6,Syngonium,18,30,10,38,50,70,30,90,500,8000,Low to bright indirect light,Shade to partial shade,Low,Moderate,No,Moderate to High
+7,Rose,15,28,-5,38,40,60,20,80,20000,60000,Full sun,Full sun (6+ hours direct),Moderate,Moderate,Moderate,Moderate
+8,Hibiscus,18,35,10,42,50,70,30,90,20000,60000,Full sun,Full sun (6+ hours direct),Moderate,High,No,Very High
+9,Mogra,18,35,10,42,50,70,30,90,15000,50000,Full sun to partial sun,Full sun to partial sun,Moderate,Moderate,No,High
+10,Croton,18,35,12,40,50,70,30,90,10000,50000,Bright indirect to full sun,Full sun to partial sun,Low,Moderate,No,High
+11,Curry Leaf,18,35,5,42,40,70,20,90,20000,60000,Full sun,Full sun (6+ hours direct),Moderate,Moderate,No,Very High
+12,Tulsi,20,35,10,42,40,70,20,90,20000,60000,Full sun,Full sun (6+ hours direct),Moderate,Moderate,No,Very High
+13,Aloe Vera,15,35,2,42,20,50,10,70,10000,50000,Bright indirect to full sun,Full sun to partial sun,Moderate,Low,Low,Very High
