@@ -9,6 +9,7 @@ class Plant(models.Model):
         default='thriving'
     )
     image = models.ImageField(upload_to='plants/', null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     connected_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
