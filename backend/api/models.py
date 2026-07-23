@@ -3,6 +3,12 @@ from django.db import models
 class Plant(models.Model):
     name = models.CharField(max_length=255)
     species = models.CharField(max_length=255)
+    device_id = models.CharField(
+        max_length=100,
+        unique=True,
+        null=True,
+        blank=True
+    )
     status = models.CharField(
         max_length=50,
         choices=[('thriving', 'Thriving'), ('struggling', 'Struggling'), ('failed', 'Failed')],

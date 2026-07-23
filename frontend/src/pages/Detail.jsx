@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
-
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from 'recharts';
 const STAGES = [
   { key: 'callus', label: 'Callus' },
   { key: 'root_init', label: 'Root initiation' },
@@ -167,6 +175,58 @@ function ObservationBanner({ plant }) {
   );
 }
 
+function SensorChart({ title, data, dataKey, unit = '' }) {
+  return (
+    <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold text-on-surface">
+          {title}
+        </h3>
+
+        <p className="text-xs text-secondary mt-1">
+          Sensor readings over time
+        </p>
+      </div>
+
+      <div className="w-full h-[280px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+            />
+
+            <XAxis
+              dataKey="time"
+              tick={{ fontSize: 11 }}
+            />
+
+            <YAxis
+              tick={{ fontSize: 11 }}
+              unit={unit}
+            />
+
+            <Tooltip
+              formatter={(value) => [`${value}${unit}`, title]}
+            />
+
+            <Line
+              type="monotone"
+              dataKey={dataKey}
+              stroke="currentColor"
+              strokeWidth={2}
+              dot={false}
+              connectNulls
+            />
+
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
 export default function Detail() {
   const { id } = useParams();
   const [plant, setPlant] = useState(null);
@@ -174,6 +234,36 @@ export default function Detail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const [sensorData, setSensorData] = useState(null);
+  const [sensorLoading, setSensorLoading] = useState(true);
+  const [sensorError, setSensorError] = useState(null);
+  const [sensorHistory, setSensorHistory] = useState([]);
+  const chartData = [...sensorHistory]
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .map(reading => ({
+      timestamp: reading.timestamp,
+
+      time: reading.timestamp
+        ? new Date(reading.timestamp * 1000).toLocaleString([], {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+        : '',
+
+      airTemp: reading.air_temp ?? null,
+
+      humidity: reading.humidity ?? null,
+
+      soilMoisture: reading.soil_raw ?? null,
+
+      soilTemp:
+        reading.water_temp != null &&
+          reading.water_temp !== -127
+          ? reading.water_temp
+          : null,
+    }));
 
   useEffect(() => {
     Promise.all([
@@ -197,6 +287,50 @@ export default function Detail() {
       });
   }, [id]);
 
+
+  useEffect(() => {
+    const fetchSensors = async () => {
+      try {
+        setSensorLoading(true);
+
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/plants/${id}/sensors/`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch sensor data");
+        }
+
+        const data = await response.json();
+
+        console.log("Sensor API:", data);
+
+        if (data.success && data.readings?.length > 0) {
+          const latest = data.readings[data.readings.length - 1];
+
+          console.log("Latest sensor reading:", latest);
+
+          // Latest reading → Overview cards
+          setSensorData(latest);
+
+          // All readings → History tab
+          setSensorHistory(data.readings);
+        } else {
+          setSensorData(null);
+          setSensorHistory([]);
+        }
+        setSensorError(null);
+      } catch (error) {
+        console.error("Sensor error:", error);
+        setSensorError(error.message);
+      } finally {
+        setSensorLoading(false);
+      }
+    };
+
+    fetchSensors();
+  }, [id]);
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <p className="text-secondary text-lg animate-pulse">Loading plant details...</p>
@@ -211,8 +345,6 @@ export default function Detail() {
       </div>
     </div>
   );
-
-  const latest = plant.readings?.[0];
   const tabs = ['Overview', 'Charts', 'AI Analysis', 'History'];
 
   return (
@@ -275,26 +407,48 @@ export default function Detail() {
 
             {/* 4 sensor cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
               <SensorCard
                 label="Soil moisture"
-                value={latest?.soil_moisture != null ? `${latest.soil_moisture}%` : null}
-                trend="up"
+                value={
+                  sensorData?.soil_raw != null
+                    ? sensorData.soil_raw
+                    : null
+                }
+                unit=" raw"
               />
+
               <SensorCard
                 label="Humidity"
-                value={latest?.humidity != null ? `${latest.humidity}%` : null}
-                trend="down"
+                value={
+                  sensorData?.humidity != null
+                    ? sensorData.humidity
+                    : null
+                }
+                unit="%"
               />
+
               <SensorCard
-                label="Soil temp"
-                value={latest?.soil_temperature != null ? latest.soil_temperature : null}
+                label="Water temp"
+                value={
+                  sensorData?.water_temp != null &&
+                    sensorData.water_temp !== -127
+                    ? sensorData.water_temp
+                    : null
+                }
                 unit="° Celsius"
               />
+
               <SensorCard
                 label="Air temp"
-                value={latest?.air_temperature != null ? latest.air_temperature : null}
+                value={
+                  sensorData?.air_temp != null
+                    ? sensorData.air_temp
+                    : null
+                }
                 unit="° Celsius"
               />
+
             </div>
 
             {/* Growth stage timeline */}
@@ -314,11 +468,72 @@ export default function Detail() {
         </div>
       )}
 
-      {/* CHARTS TAB — placeholder for your friend's ML charts */}
+      {/* CHARTS TAB */}
       {activeTab === 'charts' && (
-        <div className="bg-white rounded-2xl ghost-border p-10 botanical-shadow text-center">
-          <p className="text-secondary text-sm uppercase tracking-widest mb-2">Charts</p>
-          <p className="text-on-surface">Sensor history charts coming soon.</p>
+        <div>
+
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-on-surface">
+              Sensor Analytics
+            </h2>
+
+            <p className="text-sm text-secondary mt-1">
+              {plant.name} • {sensorHistory.length} readings
+            </p>
+          </div>
+
+          {sensorLoading ? (
+
+            <div className="bg-white rounded-2xl ghost-border p-10 text-center">
+              <p className="text-secondary">
+                Loading sensor data...
+              </p>
+            </div>
+
+          ) : sensorHistory.length === 0 ? (
+
+            <div className="bg-white rounded-2xl ghost-border p-10 text-center">
+              <p className="text-secondary">
+                No sensor data available.
+              </p>
+            </div>
+
+          ) : (
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+              <SensorChart
+                title="Air Temperature"
+                data={chartData}
+                dataKey="airTemp"
+                unit="°C"
+              />
+
+              <SensorChart
+                title="Humidity"
+                data={chartData}
+                dataKey="humidity"
+                unit="%"
+              />
+
+              <SensorChart
+                title="Soil Moisture"
+                data={chartData}
+                dataKey="soilMoisture"
+                unit=""
+              />
+
+              <SensorChart
+                title="Soil Temperature"
+                data={chartData}
+                dataKey="soilTemp"
+                unit="°C"
+              />
+
+            </div>
+
+          )}
+
         </div>
       )}
 
@@ -354,24 +569,130 @@ export default function Detail() {
       {/* HISTORY TAB */}
       {activeTab === 'history' && (
         <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
-          <h2 className="text-sm uppercase tracking-widest text-secondary mb-6">Activity log</h2>
-          {plant.logs?.length ? (
-            <div className="space-y-3">
-              {plant.logs.map((log, i) => (
-                <div key={log.id || i} className="flex items-start gap-4 pb-3 border-b border-surface-container-lowest last:border-0">
-                  <span className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <div className="flex-1 flex justify-between gap-4">
-                    <p className="text-sm text-on-surface">{log.event}</p>
-                    <p className="text-xs text-secondary flex-shrink-0">
-                      {new Date(log.date).toLocaleString()}
-                    </p>
+
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-sm uppercase tracking-widest text-secondary">
+                Sensor History
+              </h2>
+
+              <p className="text-xs text-secondary mt-1">
+                {plant.name} • {sensorHistory[0]?.ID || 'No device'}
+              </p>
+            </div>
+
+            <span className="text-xs text-secondary">
+              {sensorHistory.length} readings
+            </span>
+          </div>
+
+          {sensorLoading ? (
+            <p className="text-secondary text-sm">
+              Loading sensor history...
+            </p>
+          ) : sensorError ? (
+            <p className="text-red-500 text-sm">
+              {sensorError}
+            </p>
+          ) : sensorHistory.length > 0 ? (
+
+            <div>
+              {[...sensorHistory].reverse().map((log, index) => (
+
+                <div
+                  key={log.firebase_key || index}
+                  className={`py-5 ${index !== sensorHistory.length - 1
+                    ? 'border-b border-surface-container-low'
+                    : ''
+                    }`}
+                >
+
+                  {/* Header */}
+                  <div className="flex justify-between items-start mb-4">
+
+                    <div>
+                      <p className="text-on-surface font-semibold">
+                        Sensor Reading
+                      </p>
+
+                      <p className="text-xs text-secondary mt-1">
+                        Device: {log.ID}
+                      </p>
+                    </div>
+
+                    <span className="text-xs text-secondary">
+                      {log.timestamp
+                        ? new Date(log.timestamp * 1000).toLocaleString()
+                        : 'Unknown time'}
+                    </span>
+
                   </div>
+
+                  {/* Sensor values */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                    <div>
+                      <p className="text-xs text-secondary">
+                        Air Temperature
+                      </p>
+
+                      <p className="font-medium">
+                        {log.air_temp != null
+                          ? `${log.air_temp} °C`
+                          : '—'}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-secondary">
+                        Humidity
+                      </p>
+
+                      <p className="font-medium">
+                        {log.humidity != null
+                          ? `${log.humidity}%`
+                          : '—'}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-secondary">
+                        Soil Moisture
+                      </p>
+
+                      <p className="font-medium">
+                        {log.soil_raw ?? '—'}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-secondary">
+                        Soil Temperature
+                      </p>
+
+                      <p className="font-medium">
+                        {log.water_temp != null &&
+                          log.water_temp !== -127
+                          ? `${log.water_temp} °C`
+                          : 'Sensor unavailable'}
+                      </p>
+                    </div>
+
+                  </div>
+
                 </div>
+
               ))}
             </div>
+
           ) : (
-            <p className="text-secondary text-sm">No activity recorded yet.</p>
+
+            <p className="text-secondary text-sm">
+              No sensor readings recorded for this plant yet.
+            </p>
+
           )}
+
         </div>
       )}
     </div>

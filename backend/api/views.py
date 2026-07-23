@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from crwaler.ai.firebase_client import FirebaseClient
 from rest_framework.response import Response
 from .models import Plant, SensorReading, AIAnalysis, ActivityLog
 from .serializers import (
@@ -8,7 +9,7 @@ from .serializers import (
     AIAnalysisSerializer,
     ActivityLogSerializer,
 )
-
+firebase = FirebaseClient()
 
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.prefetch_related('readings', 'logs', 'analyses').all()
@@ -26,6 +27,45 @@ class PlantViewSet(viewsets.ModelViewSet):
         readings = SensorReading.objects.filter(plant_id=pk).order_by('-recorded_at')[:50]
         return Response(SensorReadingSerializer(readings, many=True).data)
     
+    @action(detail=True, methods=['get'], url_path='sensors')
+    def sensors(self, request, pk=None):
+
+        plant = self.get_object()
+
+        if not plant.device_id:
+            return Response(
+                {
+                    "success": False,
+                    "message": "No Firebase device ID assigned to this plant."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+
+            readings = firebase.get_recent_readings(
+                device_id=plant.device_id,
+                limit=50
+            )
+
+            return Response({
+                "success": True,
+                "plant_id": plant.id,
+                "plant_name": plant.name,
+                "device_id": plant.device_id,
+                "count": len(readings),
+                "readings": readings
+            })
+
+        except Exception as e:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request

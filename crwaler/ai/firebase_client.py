@@ -1,6 +1,6 @@
-from idna import idnadata
-import firebase_admin
+from pathlib import Path
 
+import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
@@ -13,9 +13,13 @@ class FirebaseClient:
         # Firebase Service Account
         # --------------------------------------
 
+        BASE_DIR = Path(__file__).resolve().parent.parent
+
         service_account_path = (
-            "config/firebase/"
-            "plant1-3f868-firebase-adminsdk-fbsvc-f153deca7f.json"
+            BASE_DIR
+            / "config"
+            / "firebase"
+            / "plant1-3f868-firebase-adminsdk-fbsvc-f153deca7f.json"
         )
 
         # --------------------------------------
