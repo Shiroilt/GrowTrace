@@ -14,7 +14,11 @@ class Plant(models.Model):
         choices=[('thriving', 'Thriving'), ('struggling', 'Struggling'), ('failed', 'Failed')],
         default='thriving'
     )
-    image = models.ImageField(upload_to='plants/', null=True, blank=True)
+    image = models.URLField(
+        max_length=1000,
+        null=True,
+        blank=True
+    )
     description = models.TextField(null=True, blank=True)
     connected_at = models.DateTimeField(auto_now_add=True)
 
@@ -54,9 +58,43 @@ class AIAnalysis(models.Model):
 
 
 class ActivityLog(models.Model):
-    plant = models.ForeignKey(Plant, related_name='logs', on_delete=models.CASCADE, null=True, blank=True)
+
+    LOG_TYPES = [
+        ('observation', 'Observation'),
+        ('alert', 'Alert'),
+        ('care', 'Care Activity'),
+        ('growth', 'Growth'),
+        ('system', 'System'),
+        ('ai', 'AI Analysis'),
+    ]
+
+    SOURCES = [
+        ('user', 'User'),
+        ('system', 'System'),
+        ('ai', 'AI'),
+    ]
+
+    plant = models.ForeignKey(
+        Plant,
+        related_name='logs',
+        on_delete=models.CASCADE
+    )
+
     event = models.CharField(max_length=255)
+
+    log_type = models.CharField(
+        max_length=20,
+        choices=LOG_TYPES,
+        default='observation'
+    )
+
+    source = models.CharField(
+        max_length=20,
+        choices=SOURCES,
+        default='user'
+    )
+
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.event
+        return f"{self.plant.name} - {self.event}"

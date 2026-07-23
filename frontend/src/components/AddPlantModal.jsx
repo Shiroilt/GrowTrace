@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function AddPlantModal({ isOpen, onClose, onPlantCreated }) {
   const [formData, setFormData] = useState({
-    id: '',
+    device_id: '',
     name: '',
     species: '',
     image: '',
@@ -15,14 +15,7 @@ export default function AddPlantModal({ isOpen, onClose, onPlantCreated }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Auto-generate a fallback ID when opening modal if empty
-  useEffect(() => {
-    if (isOpen) {
-      const autoId = 'PLT-' + Math.floor(100 + Math.random() * 900);
-      setFormData(prev => ({ ...prev, id: prev.id || autoId }));
-      setErrorMsg('');
-    }
-  }, [isOpen]);
+
 
   if (!isOpen) return null;
 
@@ -47,10 +40,17 @@ export default function AddPlantModal({ isOpen, onClose, onPlantCreated }) {
     e.preventDefault();
     setErrorMsg('');
 
+    // Validation
+    if (!formData.device_id.trim()) {
+      setErrorMsg('Firebase Device ID is required.');
+      return;
+    }
+
     if (!formData.name.trim()) {
       setErrorMsg('Plant Name is required.');
       return;
     }
+
     if (!formData.species.trim()) {
       setErrorMsg('Species is required.');
       return;
@@ -59,101 +59,123 @@ export default function AddPlantModal({ isOpen, onClose, onPlantCreated }) {
     setIsSubmitting(true);
 
     try {
-      const finalImage = imageMode === 'file' && imagePreview ? imagePreview : formData.image;
-      
-      // Construct plant payload
-      const plantPayload = {
-        id: formData.id ? (isNaN(formData.id) ? formData.id : parseInt(formData.id, 10)) : undefined,
-        name: formData.name.trim(),
-        species: formData.species.trim(),
-        description: formData.description.trim() || undefined,
-        status: 'thriving',
-        image: finalImage || null,
-        connected_at: new Date().toISOString(),
-        readings: [
-          {
-            soil_moisture: 75,
-            humidity: 62,
-            soil_temperature: 22.4,
-            air_temperature: 24.1,
-            recorded_at: new Date().toISOString()
-          }
-        ],
-        logs: [
-          {
-            id: Date.now(),
-            event: 'Sensor connected and initialized',
-            date: new Date().toISOString()
-          }
-        ]
-      };
+      let res;
 
-      // Try sending to backend API if available
-      let createdPlant = null;
-      try {
-        let res;
-        if (imageMode === 'file' && imageFile) {
-          const bodyData = new FormData();
-          bodyData.append('name', formData.name.trim());
-          bodyData.append('species', formData.species.trim());
-          if (formData.description) bodyData.append('description', formData.description.trim());
-          bodyData.append('image', imageFile);
-          
-          res = await fetch('http://localhost:8000/api/plants/', {
+      // --------------------------------
+      // FILE IMAGE UPLOAD
+      // --------------------------------
+      if (imageMode === 'file' && imageFile) {
+        const bodyData = new FormData();
+
+        bodyData.append('name', formData.name.trim());
+        bodyData.append('species', formData.species.trim());
+        bodyData.append('device_id', formData.device_id.trim());
+
+        if (formData.description.trim()) {
+          bodyData.append(
+            'description',
+            formData.description.trim()
+          );
+        }
+
+        bodyData.append('image', imageFile);
+
+        res = await fetch(
+          'http://127.0.0.1:8000/api/plants/',
+          {
             method: 'POST',
             body: bodyData,
-          });
-        } else {
-          res = await fetch('http://localhost:8000/api/plants/', {
+          }
+        );
+      }
+
+      // --------------------------------
+      // IMAGE URL / NO IMAGE
+      // --------------------------------
+      else {
+        res = await fetch(
+          'http://127.0.0.1:8000/api/plants/',
+          {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+
+            headers: {
+              'Content-Type': 'application/json',
+            },
+
             body: JSON.stringify({
               name: formData.name.trim(),
               species: formData.species.trim(),
-              description: formData.description.trim() || null,
-              image: formData.image.trim() || null,
+              device_id: formData.device_id.trim(),
+              description:
+                formData.description.trim() || null,
+              image:
+                formData.image.trim() || null,
             }),
-          });
-        }
-
-        if (res.ok) {
-          createdPlant = await res.json();
-        }
-      } catch (err) {
-        console.warn('Backend server connection failed, falling back to client creation:', err);
+          }
+        );
       }
 
-      // If backend call succeeded, use backend object, otherwise use client-generated plantPayload
-      const finalPlant = createdPlant || {
-        ...plantPayload,
-        id: plantPayload.id || Date.now(),
-      };
+      // --------------------------------
+      // BACKEND ERROR
+      // --------------------------------
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
 
-      onPlantCreated(finalPlant);
-      onClose();
+        console.error(
+          'Backend plant creation error:',
+          errorData
+        );
 
-      // Reset form state
+        throw new Error(
+          errorData.device_id?.[0] ||
+          errorData.name?.[0] ||
+          errorData.species?.[0] ||
+          errorData.detail ||
+          'Failed to create plant'
+        );
+      }
+
+      // --------------------------------
+      // SUCCESS
+      // --------------------------------
+      const createdPlant = await res.json();
+
+      console.log(
+        'Plant successfully created:',
+        createdPlant
+      );
+
+      onPlantCreated(createdPlant);
+
+      // Reset form
       setFormData({
-        id: '',
+        device_id: '',
         name: '',
         species: '',
         image: '',
         description: '',
       });
+
       setImageFile(null);
       setImagePreview('');
       setImageMode('url');
+
+      onClose();
+
     } catch (err) {
-      console.error(err);
-      setErrorMsg('Failed to create plant. Please check inputs and try again.');
+      console.error('Create plant error:', err);
+
+      setErrorMsg(
+        err.message ||
+        'Failed to create plant. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div 
+      <div
         className="bg-white w-full max-w-lg rounded-2xl botanical-shadow ghost-border overflow-hidden transform transition-all animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
@@ -201,16 +223,22 @@ export default function AddPlantModal({ isOpen, onClose, onPlantCreated }) {
             {/* Plant ID */}
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-secondary mb-1.5">
-                Plant ID / Sensor ID
+                Firebase Device ID <span className="text-emerald-600">*</span>
               </label>
+
               <input
                 type="text"
-                name="id"
-                value={formData.id}
+                name="device_id"
+                required
+                value={formData.device_id}
                 onChange={handleChange}
-                placeholder="e.g. PLT-102"
+                placeholder="e.g. cutting1"
                 className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
               />
+
+              <p className="text-[10px] text-secondary mt-1">
+                Enter the exact device ID stored in Firebase.
+              </p>
             </div>
           </div>
 
@@ -240,18 +268,16 @@ export default function AddPlantModal({ isOpen, onClose, onPlantCreated }) {
                 <button
                   type="button"
                   onClick={() => setImageMode('url')}
-                  className={`px-2 py-0.5 rounded-md transition-all ${
-                    imageMode === 'url' ? 'bg-emerald-100 text-emerald-800 font-medium' : 'text-gray-400 hover:text-gray-600'
-                  }`}
+                  className={`px-2 py-0.5 rounded-md transition-all ${imageMode === 'url' ? 'bg-emerald-100 text-emerald-800 font-medium' : 'text-gray-400 hover:text-gray-600'
+                    }`}
                 >
                   Image URL
                 </button>
                 <button
                   type="button"
                   onClick={() => setImageMode('file')}
-                  className={`px-2 py-0.5 rounded-md transition-all ${
-                    imageMode === 'file' ? 'bg-emerald-100 text-emerald-800 font-medium' : 'text-gray-400 hover:text-gray-600'
-                  }`}
+                  className={`px-2 py-0.5 rounded-md transition-all ${imageMode === 'file' ? 'bg-emerald-100 text-emerald-800 font-medium' : 'text-gray-400 hover:text-gray-600'
+                    }`}
                 >
                   Upload File
                 </button>
