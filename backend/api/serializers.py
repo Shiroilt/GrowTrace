@@ -22,4 +22,4 @@ class PlantDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Plant
-        fields = ['id', 'name', 'species', 'status', 'image', 'connected_at', 'readings', 'logs']
+        fields = ['id', 'name', 'species', 'status', 'image', 'description', 'connected_at', 'readings', 'logs']

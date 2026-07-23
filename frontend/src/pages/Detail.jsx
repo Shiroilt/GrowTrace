@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
+
 import {
   ResponsiveContainer,
   LineChart,
@@ -10,6 +11,10 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
+
+import DeletePlantModal from '../components/DeletePlantModal';
+
+
 const STAGES = [
   { key: 'callus', label: 'Callus' },
   { key: 'root_init', label: 'Root initiation' },
@@ -229,6 +234,7 @@ function SensorChart({ title, data, dataKey, unit = '' }) {
 
 export default function Detail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [plant, setPlant] = useState(null);
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -264,6 +270,8 @@ export default function Detail() {
           ? reading.water_temp
           : null,
     }));
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -331,6 +339,17 @@ export default function Detail() {
     fetchSensors();
   }, [id]);
 
+  const handleDeletePlant = async () => {
+    try {
+      await fetch(`http://localhost:8000/api/plants/${id}/`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.warn('Backend API delete failed or offline:', err);
+    }
+    navigate('/');
+  };
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <p className="text-secondary text-lg animate-pulse">Loading plant details...</p>
@@ -350,13 +369,25 @@ export default function Detail() {
   return (
     <div className="py-8 max-w-7xl mx-auto px-4">
 
-      {/* Back link */}
-      <Link
-        to="/"
-        className="text-secondary hover:text-primary transition-colors text-xs uppercase tracking-widest flex items-center gap-2 mb-8"
-      >
-        ← Back to archive
-      </Link>
+      {/* Back link & Actions */}
+      <div className="flex items-center justify-between mb-8">
+        <Link
+          to="/"
+          className="text-secondary hover:text-primary transition-colors text-xs uppercase tracking-widest flex items-center gap-2"
+        >
+          ← Back to archive
+        </Link>
+        <button
+          onClick={() => setIsDeleteModalOpen(true)}
+          className="px-3.5 py-1.5 rounded-xl border border-red-200 bg-red-50/50 hover:bg-red-100 text-red-600 text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-[0.98]"
+          title="Delete Plant"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Delete Plant
+        </button>
+      </div>
 
       {/* Header row */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-8">
@@ -397,6 +428,14 @@ export default function Detail() {
           ))}
         </div>
       </div>
+
+      {/* Modal for confirmation */}
+      <DeletePlantModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeletePlant}
+        plantName={plant.name}
+      />
 
       {/* OVERVIEW TAB */}
       {activeTab === 'overview' && (

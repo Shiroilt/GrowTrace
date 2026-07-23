@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PlantCard from '../components/PlantCard';
+import AddPlantModal from '../components/AddPlantModal';
 
-function ConnectPlantCard() {
+function ConnectPlantCard({ onClick }) {
   return (
-    <div className="rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-3 min-h-[200px] cursor-pointer hover:border-primary hover:bg-emerald-50/30 transition-all p-8">
-      <div className="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center">
-        <span className="text-2xl text-gray-300">+</span>
+    <div 
+      onClick={onClick}
+      className="rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-3 min-h-[200px] cursor-pointer hover:border-emerald-600 hover:bg-emerald-50/40 hover:shadow-sm active:scale-[0.99] transition-all p-8 group"
+    >
+      <div className="w-12 h-12 rounded-full border-2 border-gray-200 group-hover:border-emerald-600 group-hover:bg-emerald-600 flex items-center justify-center transition-all">
+        <span className="text-2xl text-gray-400 group-hover:text-white transition-colors">+</span>
       </div>
       <div className="text-center">
-        <p className="text-on-surface font-medium text-sm">Connect a plant</p>
+        <p className="text-on-surface font-semibold text-sm group-hover:text-emerald-800 transition-colors">Connect a plant</p>
         <p className="text-secondary text-xs mt-1">Sync a new sensor to<br />the Botanical Archive</p>
       </div>
     </div>
@@ -141,6 +145,7 @@ export default function Home() {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:8000/api/plants/')
@@ -158,6 +163,10 @@ export default function Home() {
       });
   }, []);
 
+  const handlePlantCreated = (newPlant) => {
+    setPlants(prevPlants => [newPlant, ...prevPlants]);
+  };
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <p className="text-secondary text-lg animate-pulse">Loading connected plants...</p>
@@ -173,23 +182,39 @@ export default function Home() {
   return (
     <div className="py-8 max-w-7xl mx-auto px-4">
 
-      <header className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight text-on-surface mb-2">
-          Connected plants
-        </h1>
-        <p className="text-secondary text-sm">
-          Manage and monitor your living archive in real-time.
-        </p>
+      <header className="mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight text-on-surface mb-2">
+            Connected plants
+          </h1>
+          <p className="text-secondary text-sm">
+            Manage and monitor your living archive in real-time.
+          </p>
+        </div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          style={{ background: '#00694c' }}
+          className="self-start sm:self-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-white hover:opacity-90 active:scale-[0.98] transition-all flex items-center gap-2 shadow-sm"
+        >
+          <span className="text-lg leading-none">+</span> Add Plant
+        </button>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {plants.map(plant => (
           <PlantCard key={plant.id} plant={plant} />
         ))}
-        <ConnectPlantCard />
+        <ConnectPlantCard onClick={() => setIsModalOpen(true)} />
       </div>
 
       {plants.length > 0 && <SystemAnalytics plants={plants} />}
+
+      {/* Modal for adding new plant */}
+      <AddPlantModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onPlantCreated={handlePlantCreated}
+      />
     </div>
   );
 }
