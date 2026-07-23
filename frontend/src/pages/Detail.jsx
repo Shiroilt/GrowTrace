@@ -350,6 +350,7 @@ export default function Detail() {
     navigate('/');
   };
 
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <p className="text-secondary text-lg animate-pulse">Loading plant details...</p>
