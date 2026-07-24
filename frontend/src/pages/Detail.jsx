@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import StatusBadge from '../components/StatusBadge';
-
+import ReactMarkdown from 'react-markdown';
+import GrowTraceChat from '../components/GrowTraceChat';
 import {
   ResponsiveContainer,
   LineChart,
@@ -94,35 +95,103 @@ function GrowthTimeline({ stage }) {
   );
 }
 
-function AIScoreCard({ analysis }) {
-  if (!analysis) return (
-    <div className="rounded-2xl p-6 h-full flex items-center justify-center"
-      style={{ background: '#00694c' }}>
-      <p className="text-white/60 text-sm text-center">No AI analysis available yet.</p>
-    </div>
-  );
-  return (
-    <div className="rounded-2xl p-6 flex flex-col gap-4"
-      style={{ background: '#00694c' }}>
-      <div className="flex justify-between items-start">
-        <span className="text-[10px] uppercase tracking-widest text-white/60">
-          AI condition score
-        </span>
-        <span className="text-white/60 text-lg">✦</span>
-      </div>
-      <div className="flex items-end gap-1">
-        <span className="text-7xl font-bold text-white leading-none">
-          {analysis.condition_score}
-        </span>
-        <span className="text-white/60 text-xl mb-2">/100</span>
-      </div>
-      <div className="rounded-xl p-4" style={{ background: 'rgba(0,0,0,0.2)' }}>
-        <p className="text-white/80 text-sm leading-relaxed">
-          {analysis.recommendation || 'No recommendation available.'}
+function AIScoreCard({
+  analysis,
+  onGenerateReport,
+  reportLoading
+}) {
+  if (!analysis?.status) {
+    return (
+      <div
+        className="rounded-2xl p-6 h-full flex items-center justify-center"
+        style={{ background: '#00694c' }}
+      >
+        <p className="text-white/60 text-sm text-center">
+          No AI analysis available yet.
         </p>
       </div>
-      <button className="w-full bg-white text-primary font-semibold py-3 rounded-xl text-sm hover:bg-white/90 transition-colors">
-        Generate full report
+    );
+  }
+
+  const status = analysis.status;
+  const highestRisk = status.highest_risk;
+
+  return (
+    <div
+      className="rounded-2xl p-6 flex flex-col gap-5"
+      style={{ background: '#00694c' }}
+    >
+      <div className="flex justify-between items-start">
+        <span className="text-[10px] uppercase tracking-widest text-white/60">
+          AI Plant Analysis
+        </span>
+
+        <span className="text-white/60 text-lg">✦</span>
+      </div>
+
+      <div>
+        <p className="text-xs text-white/60 mb-1">
+          Plant Status
+        </p>
+
+        <p className="text-4xl font-bold text-white">
+          {status.plant_status || '--'}
+        </p>
+      </div>
+
+      <div
+        className="rounded-xl p-4"
+        style={{ background: 'rgba(0,0,0,0.2)' }}
+      >
+        <p className="text-xs text-white/60">
+          Highest Risk
+        </p>
+
+        <p className="text-lg text-white font-semibold capitalize mt-1">
+          {highestRisk?.name
+            ? highestRisk.name.replaceAll('_', ' ')
+            : '--'}
+        </p>
+
+        <div className="flex justify-between mt-2 text-sm">
+          <span className="text-white/70">
+            Risk score
+          </span>
+
+          <span className="text-white font-semibold">
+            {highestRisk?.score ?? '--'}%
+          </span>
+        </div>
+
+        <div className="flex justify-between mt-1 text-sm">
+          <span className="text-white/70">
+            Level
+          </span>
+
+          <span className="text-white font-semibold">
+            {highestRisk?.level || '--'}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex justify-between text-sm">
+        <span className="text-white/60">
+          AI Confidence
+        </span>
+
+        <span className="text-white font-semibold">
+          {status.ai_confidence != null
+            ? `${(status.ai_confidence * 100).toFixed(0)}%`
+            : '--'}
+        </span>
+      </div>
+
+      <button
+        onClick={onGenerateReport}
+        disabled={reportLoading}
+        className="w-full bg-white text-primary font-semibold py-3 rounded-xl text-sm hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {reportLoading ? 'Generating report...' : 'Generate full report'}
       </button>
     </div>
   );
@@ -154,10 +223,11 @@ function RecentAlerts({ logs }) {
   );
 }
 
-function ObservationBanner({ plant }) {
+function ObservationBanner({ plant, onAddObservation }) {
   const latestLog = plant.logs?.[0];
+
   return (
-    <div className="relative rounded-2xl overflow-hidden min-h-[200px] flex items-end">
+    <div className="relative rounded-2xl overflow-hidden min-h-[220px] flex items-end">
       {plant.image ? (
         <img
           src={plant.image}
@@ -167,14 +237,36 @@ function ObservationBanner({ plant }) {
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-800 to-emerald-950" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      <div className="relative z-10 p-6">
-        <span className="block text-[10px] uppercase tracking-widest text-white/60 mb-2">
-          Observation log
-        </span>
-        <p className="text-white text-xl font-semibold leading-snug">
-          {latestLog?.event || 'No observations recorded yet.'}
-        </p>
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+      <div className="relative z-10 p-6 w-full">
+        <div className="flex justify-between items-end gap-4">
+
+          <div>
+            <span className="block text-[10px] uppercase tracking-widest text-white/60 mb-2">
+              Observation log
+            </span>
+
+            <p className="text-white text-xl font-semibold leading-snug">
+              {latestLog?.event || 'No observations recorded yet.'}
+            </p>
+
+            {latestLog?.date && (
+              <p className="text-white/60 text-xs mt-2">
+                {new Date(latestLog.date).toLocaleString()}
+              </p>
+            )}
+          </div>
+
+          <button
+            onClick={onAddObservation}
+            className="bg-white text-primary px-4 py-2 rounded-xl text-sm font-semibold hover:bg-white/90 transition"
+          >
+            + Add Observation
+          </button>
+
+        </div>
       </div>
     </div>
   );
@@ -244,6 +336,13 @@ export default function Detail() {
   const [sensorLoading, setSensorLoading] = useState(true);
   const [sensorError, setSensorError] = useState(null);
   const [sensorHistory, setSensorHistory] = useState([]);
+  const [showObservationForm, setShowObservationForm] = useState(false);
+  const [observation, setObservation] = useState('');
+  const [observationSaving, setObservationSaving] = useState(false);
+  const [observationError, setObservationError] = useState(null);
+  const [fullReport, setFullReport] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportError, setReportError] = useState(null);
   const chartData = [...sensorHistory]
     .sort((a, b) => a.timestamp - b.timestamp)
     .map(reading => ({
@@ -272,29 +371,92 @@ export default function Detail() {
     }));
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const generateFullReport = async () => {
+    try {
+      setReportLoading(true);
+      setReportError(null);
 
-  useEffect(() => {
-    Promise.all([
-      fetch(`http://localhost:8000/api/plants/${id}/`).then(r => {
-        if (!r.ok) throw new Error('Failed to fetch plant');
-        return r.json();
-      }),
-      fetch(`http://localhost:8000/api/plants/${id}/analysis/`).then(r => {
-        if (!r.ok) return null;
-        return r.json();
-      }).catch(() => null),
-    ])
-      .then(([plantData, analysisData]) => {
-        setPlant(plantData);
-        setAnalysis(analysisData);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
+      // Check whether browser supports location
+      if (!navigator.geolocation) {
+        throw new Error(
+          'Geolocation is not supported by your browser.'
+        );
+      }
+
+      // Get current browser/device location
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          reject,
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000,
+          }
+        );
       });
-  }, [id]);
 
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      console.log('Current location:', {
+        latitude,
+        longitude,
+        accuracy: position.coords.accuracy,
+      });
+
+      // Send current location to Django
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/plants/${id}/report/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify({
+            latitude: latitude,
+            longitude: longitude,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log('Full report response:', data);
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || 'Failed to generate report'
+        );
+      }
+
+      setFullReport(data.report);
+
+    } catch (err) {
+      console.error('Report generation error:', err);
+
+      // Better messages for location errors
+      if (err.code === 1) {
+        setReportError(
+          'Location permission denied. Please allow location access in Brave.'
+        );
+      } else if (err.code === 2) {
+        setReportError(
+          'Your current location could not be determined.'
+        );
+      } else if (err.code === 3) {
+        setReportError(
+          'Location request timed out. Please try again.'
+        );
+      } else {
+        setReportError(err.message);
+      }
+
+    } finally {
+      setReportLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchSensors = async () => {
@@ -338,7 +500,61 @@ export default function Detail() {
 
     fetchSensors();
   }, [id]);
+  useEffect(() => {
+    const fetchPlantAndAnalysis = async () => {
+      try {
+        setLoading(true);
 
+        const plantResponse = await fetch(
+          `http://127.0.0.1:8000/api/plants/${id}/`
+        );
+
+        if (!plantResponse.ok) {
+          throw new Error("Failed to fetch plant");
+        }
+
+        const plantData = await plantResponse.json();
+        setPlant(plantData);
+
+        // Fetch crawler/RAG analysis separately
+        try {
+          const analysisResponse = await fetch(
+            `http://127.0.0.1:8000/api/plants/${id}/analysis/`
+          );
+
+          if (analysisResponse.ok) {
+            const analysisData = await analysisResponse.json();
+
+            console.log("FULL ANALYSIS RESPONSE:", analysisData);
+            console.log("CRAWLER ANALYSIS:", analysisData.analysis);
+
+            if (analysisData.success) {
+              setAnalysis(analysisData.analysis);
+            } else {
+              setAnalysis(null);
+            }
+          } else {
+            console.error(
+              "Analysis request failed:",
+              analysisResponse.status
+            );
+            setAnalysis(null);
+          }
+        } catch (analysisError) {
+          console.error("Analysis error:", analysisError);
+          setAnalysis(null);
+        }
+
+      } catch (error) {
+        console.error("Plant error:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlantAndAnalysis();
+  }, [id]);
   const handleDeletePlant = async () => {
     try {
       await fetch(`http://localhost:8000/api/plants/${id}/`, {
@@ -349,7 +565,69 @@ export default function Detail() {
     }
     navigate('/');
   };
+  const handleAddObservation = async () => {
+    if (!observation.trim()) {
+      setObservationError('Please enter an observation.');
+      return;
+    }
 
+    try {
+      setObservationSaving(true);
+      setObservationError(null);
+
+      const response = await fetch(
+        'http://127.0.0.1:8000/api/logs/',
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify({
+            plant: Number(id),
+            event: observation.trim(),
+            log_type: 'observation',
+            source: 'user',
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Log API error:', data);
+        throw new Error(
+          data.detail ||
+          JSON.stringify(data) ||
+          'Failed to save observation'
+        );
+      }
+
+      console.log('Observation created:', data);
+
+      // Update React immediately without refreshing page
+      setPlant(prev => ({
+        ...prev,
+        logs: [
+          data,
+          ...(prev.logs || [])
+        ]
+      }));
+
+      // Clear form
+      setObservation('');
+
+      // Close form
+      setShowObservationForm(false);
+
+    } catch (error) {
+      console.error('Observation error:', error);
+      setObservationError(error.message);
+    } finally {
+      setObservationSaving(false);
+    }
+  };
 
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
@@ -365,7 +643,7 @@ export default function Detail() {
       </div>
     </div>
   );
-  const tabs = ['Overview', 'Charts', 'AI Analysis', 'History'];
+  const tabs = ['Overview', 'Charts', 'AI Analysis', 'History', 'GrowTrace AI'];
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4">
@@ -497,17 +775,100 @@ export default function Detail() {
             )}
 
             {/* Observation banner with plant image */}
-            <ObservationBanner plant={plant} />
+            <ObservationBanner
+              plant={plant}
+              onAddObservation={() => {
+                setObservationError(null);
+                setShowObservationForm(true);
+              }}
+            />
+            {showObservationForm && (
+              <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
+
+                <div className="flex justify-between items-center mb-4">
+
+                  <div>
+                    <h3 className="font-semibold text-on-surface">
+                      Add Observation
+                    </h3>
+
+                    <p className="text-xs text-secondary mt-1">
+                      Record something you noticed about {plant.name}.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowObservationForm(false);
+                      setObservationError(null);
+                    }}
+                    className="text-secondary hover:text-on-surface"
+                  >
+                    ✕
+                  </button>
+
+                </div>
+
+                <textarea
+                  value={observation}
+                  onChange={(e) => setObservation(e.target.value)}
+                  placeholder="Example: New leaf appeared today..."
+                  rows={4}
+                  className="w-full border border-gray-200 rounded-xl p-4 outline-none focus:border-primary resize-none"
+                />
+
+                {observationError && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {observationError}
+                  </p>
+                )}
+
+                <div className="flex justify-end gap-3 mt-4">
+
+                  <button
+                    onClick={() => {
+                      setShowObservationForm(false);
+                      setObservationError(null);
+                    }}
+                    className="px-4 py-2 text-secondary text-sm"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    onClick={handleAddObservation}
+                    disabled={observationSaving}
+                    className="bg-primary text-white px-5 py-2 rounded-xl text-sm font-semibold disabled:opacity-50"
+                  >
+                    {observationSaving
+                      ? 'Saving...'
+                      : 'Save Observation'}
+                  </button>
+
+                </div>
+
+              </div>
+            )}
           </div>
 
           {/* Right column — AI score + alerts */}
           <div className="flex flex-col gap-6">
-            <AIScoreCard analysis={analysis} />
+            <AIScoreCard
+              analysis={analysis}
+              onGenerateReport={generateFullReport}
+              reportLoading={reportLoading}
+            />
             <RecentAlerts logs={plant.logs} />
           </div>
         </div>
       )}
-
+      {/* GROWTRACE AI TAB */}
+      {activeTab === 'growtrace_ai' && (
+        <GrowTraceChat
+          plantId={plant.id}
+          plantName={plant.name}
+        />
+      )}
       {/* CHARTS TAB */}
       {activeTab === 'charts' && (
         <div>
@@ -579,33 +940,222 @@ export default function Detail() {
 
       {/* AI ANALYSIS TAB */}
       {activeTab === 'ai_analysis' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-2xl p-6" style={{ background: '#00694c' }}>
-            <p className="text-[10px] uppercase tracking-widest text-white/60 mb-2">Survival status</p>
-            <p className="text-4xl font-bold text-white capitalize mb-1">
-              {analysis?.survival_status || '--'}
-            </p>
-            <p className="text-white/60 text-sm">
-              Condition score: {analysis?.condition_score ?? '--'}/100
-            </p>
-          </div>
-          <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
-            <p className="text-[10px] uppercase tracking-widest text-secondary mb-2">Anomaly detection</p>
-            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${analysis?.anomaly_detected
-              ? 'bg-red-50 text-red-600'
-              : 'bg-emerald-50 text-emerald-700'
-              }`}>
-              <span className={`w-2 h-2 rounded-full ${analysis?.anomaly_detected ? 'bg-red-500' : 'bg-emerald-500'
-                }`} />
-              {analysis?.anomaly_detected ? 'Anomaly detected' : 'No anomalies detected'}
+        <div className="space-y-6">
+
+          {/* Main status */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div
+              className="rounded-2xl p-6"
+              style={{ background: '#00694c' }}
+            >
+              <p className="text-[10px] uppercase tracking-widest text-white/60 mb-2">
+                Plant Status
+              </p>
+
+              <p className="text-4xl font-bold text-white">
+                {analysis?.status?.plant_status || '--'}
+              </p>
             </div>
-            <p className="text-secondary text-sm mt-4 leading-relaxed">
-              {analysis?.recommendation || 'No recommendation available.'}
-            </p>
+
+
+            <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
+
+              <p className="text-[10px] uppercase tracking-widest text-secondary mb-2">
+                Highest Risk
+              </p>
+
+              <p className="text-2xl font-bold text-on-surface capitalize">
+                {analysis?.status?.highest_risk?.name
+                  ?.replaceAll('_', ' ') || '--'}
+              </p>
+
+              <p className="text-secondary mt-2">
+                Score: {analysis?.status?.highest_risk?.score ?? '--'}%
+              </p>
+
+              <p className="text-secondary">
+                Level: {analysis?.status?.highest_risk?.level || '--'}
+              </p>
+
+            </div>
+
+
+            <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
+
+              <p className="text-[10px] uppercase tracking-widest text-secondary mb-2">
+                AI Confidence
+              </p>
+
+              <p className="text-4xl font-bold text-on-surface">
+                {analysis?.status?.ai_confidence != null
+                  ? `${(
+                    analysis.status.ai_confidence * 100
+                  ).toFixed(0)}%`
+                  : '--'}
+              </p>
+
+              {analysis?.status?.confidence_warning && (
+                <p className="text-amber-600 text-sm mt-3">
+                  {analysis.status.confidence_warning}
+                </p>
+              )}
+
+            </div>
+
           </div>
+
+
+          {/* Risk analysis */}
+          <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
+
+            <h3 className="text-sm uppercase tracking-widest text-secondary mb-6">
+              Plant Risk Analysis
+            </h3>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+              {Object.entries(
+                analysis?.status?.risks || {}
+              ).map(([name, score]) => (
+
+                <div key={name}>
+
+                  <p className="text-xs text-secondary capitalize">
+                    {name.replaceAll('_', ' ')}
+                  </p>
+
+                  <p className="text-2xl font-bold text-on-surface mt-1">
+                    {score}%
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+
+          {/* Sensor health */}
+          <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
+
+            <h3 className="text-sm uppercase tracking-widest text-secondary mb-6">
+              Sensor Health
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+              {Object.entries(
+                analysis?.analysis?.sensor_health?.sensors || {}
+              ).map(([sensor, info]) => (
+
+                <div
+                  key={sensor}
+                  className="border rounded-xl p-4"
+                >
+
+                  <p className="font-medium capitalize">
+                    {sensor.replaceAll('_', ' ')}
+                  </p>
+
+                  <p
+                    className={`text-sm mt-2 font-semibold ${info.status === 'OK'
+                      ? 'text-emerald-600'
+                      : 'text-amber-600'
+                      }`}
+                  >
+                    {info.status}
+                  </p>
+
+                  <p className="text-xs text-secondary mt-1">
+                    Valid readings: {info.valid_percent}%
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
         </div>
       )}
+      {/* FULL AI REPORT */}
+      {fullReport && (
+        <div className="mt-8 bg-white rounded-2xl ghost-border botanical-shadow overflow-hidden">
 
+          {/* Report header */}
+          <div className="px-8 py-6 border-b border-surface-container-low">
+            <div className="flex items-center justify-between">
+
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-primary mb-1">
+                  GrowTrace AI
+                </p>
+
+                <h2 className="text-2xl font-bold text-on-surface">
+                  Full Plant Health Report
+                </h2>
+
+                <p className="text-sm text-secondary mt-1">
+                  {plant.name} • {plant.species}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setFullReport(null)}
+                className="text-secondary hover:text-on-surface text-sm"
+              >
+                ✕ Close
+              </button>
+
+            </div>
+          </div>
+
+          {/* Report content */}
+          <div className="px-8 py-8">
+
+            <div className="
+        prose
+        prose-sm
+        md:prose-base
+        max-w-none
+
+        prose-headings:text-on-surface
+        prose-h1:text-3xl
+        prose-h2:text-2xl
+        prose-h3:text-xl
+
+        prose-p:text-secondary
+        prose-li:text-secondary
+
+        prose-strong:text-on-surface
+
+        prose-hr:border-surface-container-low
+      ">
+              <ReactMarkdown>
+                {fullReport}
+              </ReactMarkdown>
+            </div>
+
+          </div>
+
+        </div>
+      )}
+      {reportError && (
+        <div className="mt-6 p-4 rounded-xl bg-red-50 border border-red-200">
+          <p className="text-sm font-medium text-red-700">
+            Failed to generate report
+          </p>
+
+          <p className="text-sm text-red-600 mt-1">
+            {reportError}
+          </p>
+        </div>
+      )}
       {/* HISTORY TAB */}
       {activeTab === 'history' && (
         <div className="bg-white rounded-2xl ghost-border p-6 botanical-shadow">
